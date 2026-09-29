@@ -1,41 +1,27 @@
 ﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<title>あなたのＨＰタイトル</title>
-<meta name="keywords" content="ページのキーワードA,B,C">
-<meta name="description" content="ページの説明">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動作テスト画面</title>
 </head>
 <body>
-<div id="outer">
-<header>
-<div class="header-inner">
-<h1>あなたのＨＰタイトル</h1>
-<p>あなたのＨＰの説明文</p>
-</div>
-</header>
-<div id="content">
-<div class="inner">
-<h2>記事ページ見出し・大</h2>
-<p>文章あれこれ</p>
-<h3>記事ページ見出し・中</h3>
-<p>文章あれこれ</p>
-<h4>記事ページ見出し・小</h4>
-<p>文章あれこれ</p>
-</div>
-<aside>
-<div class="left-title">サイドバータイトル</div>
-<div class="link">
-<ul>
-<li>記事ページへのリンク</li>
-<li>記事ページへのリンク</li>
-</ul>
-</div>
-</aside>
-</div>
-<footer>c 2010 あなたのホームページ</footer>
-</div>
+    <h1>マッチングシステム 動作テスト</h1>
+    <button onclick="location.href='./scan.html'" style="padding: 15px; background: #00bcd4; color: white; border: none; border-radius: 5px; font-size: 16px; margin-bottom: 20px; cursor: pointer;">
+   	// カメラを起動してQRコードを読み取る
+	</button>
+    
+    <p>テスト用のQRコード読み込みを再現します。下のボタンを押してみてください。</p>
+    <button onclick="testScan('code001')">ユーザー1 (code001) のページを別タブで開く</button>
+    <button onclick="testScan('code002')">ユーザー2 (code002) のページを別タブで開く</button>
+
+    <script>
+        function testScan(code) {
+            // 本番環境では、これがQRコードから読み取ったURLになります
+            // 今回は別タブ（_blank）でパーソナルページ（仮）を開きます
+            const targetUrl = `./profile-view.html?code=${code}`;
+            window.open(targetUrl, '_blank');
+        }
+    </script>
 </body>
 </html>
