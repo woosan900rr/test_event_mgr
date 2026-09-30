@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRコードリーダー</title>
+    <!-- ?? CDN経由で定評のあるQRコード読み取りライブラリを読み込み -->
+    <script src="./html5-qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>名札QRコード スキャナー</h1>
+    <p>名札のQRコードをカメラにかざしてください。</p>
+
+    <!-- ?? カメラ映像が表示されるエリア -->
+    <div id="reader"></div>
+
+    <br>
+    <button class="btn" onclick="location.href='/'">テストトップに戻る</button>
+
+    <script>
+        // QRコードを検出したときの処理
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log(`読み取り成功: ${decodedText}`);
+
+            // ?? 読み取ったデータ（URLやコード）を解析する
+            let code = decodedText;
+
+            // もしQRコードの中身が「http??code=xxxx」というフルURLだった場合、codeの値だけを抜き出す
+            if (decodedText.includes('code=')) {
+                const url = new URL(decodedText);
+                code = url.searchParams.get('code');
+            }
+
+            // ?? 読み取りが成功したらカメラを一度停止して、別タブでプロフィールを開く
+            html5QrcodeScanner.clear().then(() => {
+                const targetUrl = `./profile-view.html?code=${code}`;
+                window.open(targetUrl, '_blank');
+                
+                // 32026年時点のモダンな挙動として、数秒後にカメラを再開できるように再リロードボタンを表示するか、
+                // もしくはページを再起動して次の人のスキャンに備えます。
+                alert(`${code} のプロフィールを開きました。次の人をスキャンするにはOKを押してください。`);
+                location.reload(); 
+            }).catch(error => {
+                console.error("カメラ停止エラー:", error);
+            });
+        }
+
+        function onScanFailure(error) {
+            // 読み取り中（フレーム内にQRコードがない時）も常に呼ばれるため、基本は何も処理しなくてOKです
+        }
+
+        // ?? スキャナーの初期化設定（四角い読み取り枠のサイズなどを指定）
+        const html5QrcodeScanner = new Html5QrcodeScanner(
+            "reader", 
+            { 
+                fps: 10,             // 1秒間に何回スキャンを試みるか
+                qrbox: { width: 250, height: 250 }, // 読み取りエリアの四角のサイズ
+                rememberLastUsedCamera: true // 前回使ったカメラ（背面カメラなど）を記憶する
+            },
+            /* verbose= */ false
+        );
+
+        // スキャナーの起動
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+</body>
+</html>
