@@ -60,10 +60,10 @@
 
             // ?? 読み取りが成功したらカメラを一度停止して、別タブでプロフィールを開く
             html5QrcodeScanner.clear().then(() => {
-                const targetUrl = `./profile-view.html?code=${code}`;
+                const targetUrl = `https://woosan900rr.github.io/test_event_mgr/view_profile.html`;
                 window.open(targetUrl, '_blank');
                 
-                // 32026年時点のモダンな挙動として、数秒後にカメラを再開できるように再リロードボタンを表示するか、
+                // 2026年時点のモダンな挙動として、数秒後にカメラを再開できるように再リロードボタンを表示するか、
                 // もしくはページを再起動して次の人のスキャンに備えます。
                 alert(`${code} のプロフィールを開きました。次の人をスキャンするにはOKを押してください。`);
                 location.reload(); 
